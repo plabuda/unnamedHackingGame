@@ -36,7 +36,12 @@ function grid.drawGrid(cx, cy, w, h)
             grid.drawTriangle(cx, cy, i, j)
         end 
     end
-
-
 end
+
+
+function grid.getCoordinates(cx, cy, mx, my)
+    return mx - cx, my - cy
+end
+
+
 return grid
