@@ -1,8 +1,9 @@
 local grid = require("grid")
 
 function love.draw()
-   a, b = grid.getCoordinates(400, 300, love.mouse.getX(), love.mouse.getY())
+   gridX, gridY = grid.getCoordinates(400, 300, love.mouse.getX(), love.mouse.getY())
+   -- draw a triangle at calculated coordinates as a final test
+   love.graphics.setColor(0,0.3,0.3)
+   grid.drawTriangle(400, 300, gridX, gridY, "fill") 
    grid.drawGrid(400,300,9,5)
-   text = a .. " | " .. b
-   love.graphics.print(text, 0, 0)
 end

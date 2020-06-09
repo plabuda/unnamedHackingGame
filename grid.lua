@@ -3,22 +3,28 @@ local base = 100
 
 local grid = {}
 
-function grid.drawUpTriangle(cx, cy, w, h)
-    love.graphics.line(cx - w/2, cy + h/2, cx, cy - h/2, cx + w/2, cy + h/2, cx - w/2, cy + h/2)
+function grid.drawUpTriangle(cx, cy, w, h, mode)
+    if mode == nil then
+        mode = "line"
+    end
+    love.graphics.polygon(mode, cx - w/2, cy + h/2, cx, cy - h/2, cx + w/2, cy + h/2)
 end
 
-function grid.drawDownTriangle(cx, cy, w, h)
-    love.graphics.line(cx - w/2, cy - h/2, cx + w/2, cy - h/2, cx, cy + h/2,  cx - w/2, cy - h/2)
+function grid.drawDownTriangle(cx, cy, w, h, mode)
+    if mode == nil then
+        mode = "line"
+    end
+    love.graphics.polygon(mode, cx - w/2, cy - h/2, cx + w/2, cy - h/2, cx, cy + h/2)
 end
 
-function grid.drawTriangle(cx, cy, gridX, gridY)
+function grid.drawTriangle(cx, cy, gridX, gridY, mode)
     local x = cx + base/2 * gridX
     local y = cy + height * gridY
     local text = gridX .. "," .. gridY
     if (gridX + gridY) % 2 == 0 then
-        grid.drawUpTriangle(x,y,base,height)
+        grid.drawUpTriangle(x,y,base,height, mode)
     else
-        grid.drawDownTriangle(x,y,base,height)
+        grid.drawDownTriangle(x,y,base,height, mode)
     end
     love.graphics.print(text, x - 8, y-8)
 
@@ -75,20 +81,19 @@ function grid.getCoordinates(cx, cy, mx, my)
         gridX = gridX + 1
     end
 
-    love.graphics.setColor(0.1, 0.0, 0.0)
-    love.graphics.rectangle( "fill", oX, my - 300, subWidth, 600 )
-    love.graphics.setColor(0.0, 0.1, 0.0)
-    love.graphics.rectangle( "fill", mx - 300, oY, 600, height )
-    if isAbove then 
-        love.graphics.setColor(0.1, 0.1, 0.0)
-    else
-        love.graphics.setColor(0.3, 0.3, 0.0)
-    end
-    love.graphics.rectangle( "fill", oX, oY, subWidth, height)
-    love.graphics.setColor(0.6, 0.6, 0.0)
-    love.graphics.circle("fill", oX, oY, 7)
+    --love.graphics.setColor(0.1, 0.0, 0.0)
+    --love.graphics.rectangle( "fill", oX, my - 300, subWidth, 600 )
+    --love.graphics.setColor(0.0, 0.1, 0.0)
+    --love.graphics.rectangle( "fill", mx - 300, oY, 600, height )
+    --if isAbove then 
+        --love.graphics.setColor(0.1, 0.1, 0.0)
+    --else
+        --love.graphics.setColor(0.3, 0.3, 0.0)
+    --end
+    --love.graphics.rectangle( "fill", oX, oY, subWidth, height)
 
-
+    --love.graphics.setColor(0.6, 0.6, 0.0)
+    --love.graphics.circle("fill", oX, oY, 7)
 
     return gridX, gridY
 end
