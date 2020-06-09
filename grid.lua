@@ -51,13 +51,46 @@ function grid.getCoordinates(cx, cy, mx, my)
     local subWidth = base / 2
     local subGridX =  math.floor( deltaX / subWidth ) 
 
+    -- Find the top-left corner (origin) of current rextangle in the subGrid
+    local oX = cx + (subGridX * subWidth)
+    local oY = cy + (gridY * height) - height/2
+
+    -- caluclate distances between the rectangle origin and mouse
+    local deltaOX = mx - oX
+    local deltaOY = my - oY
+    
+    --TODO flip x here based on type of line
+    local shouldFlip = (subGridX + gridY) % 2 == 1
+    if shouldFlip then
+        deltaOX = subWidth - deltaOX
+    end
+
+    --scale the coordinates respectively and check which half the mouse is in
+    local isAbove = deltaOX * height < deltaOY * subWidth
+
+    -- now we can calculate the actual X location on the triangle grid
+    local gridX = subGridX
+
+    if shouldFlip == isAbove then
+        gridX = gridX + 1
+    end
+
     love.graphics.setColor(0.1, 0.0, 0.0)
-    love.graphics.rectangle( "fill", cx + (subGridX * subWidth), my - 300, subWidth, 600 )
+    love.graphics.rectangle( "fill", oX, my - 300, subWidth, 600 )
     love.graphics.setColor(0.0, 0.1, 0.0)
-    love.graphics.rectangle( "fill", mx - 300, cy + (gridY * height) - height/2, 600, height )
-    love.graphics.setColor(0.1, 0.1, 0.0)
-    love.graphics.rectangle( "fill", cx + (subGridX * subWidth), cy + (gridY * height) - height/2, subWidth, height)
-    return subGridX, gridY
+    love.graphics.rectangle( "fill", mx - 300, oY, 600, height )
+    if isAbove then 
+        love.graphics.setColor(0.1, 0.1, 0.0)
+    else
+        love.graphics.setColor(0.3, 0.3, 0.0)
+    end
+    love.graphics.rectangle( "fill", oX, oY, subWidth, height)
+    love.graphics.setColor(0.6, 0.6, 0.0)
+    love.graphics.circle("fill", oX, oY, 7)
+
+
+
+    return gridX, gridY
 end
 
 
