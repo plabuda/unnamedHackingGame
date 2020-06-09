@@ -25,6 +25,7 @@ function grid.drawTriangle(cx, cy, gridX, gridY)
 end
 
 function grid.drawGrid(cx, cy, w, h)
+    love.graphics.setColor(1, 1, 1)
     local xMin = math.floor( w/2 ) * -1
     local xMax = w + xMin - 1
 
@@ -40,7 +41,23 @@ end
 
 
 function grid.getCoordinates(cx, cy, mx, my)
-    return mx - cx, my - cy
+    local deltaX = mx - cx
+    local deltaY = my - cy
+    -- detect current row by simple rounding of the y coordinate, shifted by half a row height
+    local gridY = math.floor( (deltaY + height/2) / height ) 
+
+    -- Find a column of width equal to half of base. Finding this "sub-grid" coordinate
+    -- will make final cell detection a trivial check comparison scaled x and y coordinates
+    local subWidth = base / 2
+    local subGridX =  math.floor( deltaX / subWidth ) 
+
+    love.graphics.setColor(0.1, 0.0, 0.0)
+    love.graphics.rectangle( "fill", cx + (subGridX * subWidth), my - 300, subWidth, 600 )
+    love.graphics.setColor(0.0, 0.1, 0.0)
+    love.graphics.rectangle( "fill", mx - 300, cy + (gridY * height) - height/2, 600, height )
+    love.graphics.setColor(0.1, 0.1, 0.0)
+    love.graphics.rectangle( "fill", cx + (subGridX * subWidth), cy + (gridY * height) - height/2, subWidth, height)
+    return subGridX, gridY
 end
 
 
